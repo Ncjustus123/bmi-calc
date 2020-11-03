@@ -3,6 +3,8 @@ import 'package:bmi_calculator/icon_content.dart';
 import 'package:bmi_calculator/reuseable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'result_page.dart';
+import 'calculator_brain.dart';
 
 enum Gender {
   male,
@@ -215,19 +217,39 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            color: kBottomContColor,
-            margin: EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: kBottomcontHeight,
-            child: Center(
-              child: Text(
-                'CALCULATE',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
+          BottomButton( name:  'CALCULATE', onTap: (){
+            CalculatorBrain calc = CalculatorBrain(height: height,weight: weight);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ResultPage(
+              bmiResult: calc.calculateBMI() ,
+              resultText: calc.getResult() ,
+              interpretation: calc.getInterpretation() ,
+            )));},),
         ],
+      ),
+    );
+  }
+}
+
+class BottomButton extends StatelessWidget {
+ final String name;
+ final Function onTap;
+BottomButton({@required this.name, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        color: kBottomContColor,
+        margin: EdgeInsets.only(top: 10.0),
+        width: double.infinity,
+        height: kBottomcontHeight,
+        child: Center(
+          child: Text( name
+           ,
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
     );
   }
